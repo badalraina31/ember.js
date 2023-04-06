@@ -4,11 +4,9 @@ declare module 'ember' {
   import Rsvp from 'rsvp';
 
   import type { Registry as ControllerRegistry } from '@ember/controller';
-  import type * as EmberStringNs from '@ember/string';
   import type * as EmberTemplateNs from '@ember/template';
   import * as EmberTemplateHandlebarsNs from '@ember/template/-private/handlebars';
   import type * as EmberServiceNs from '@ember/service';
-  import type * as EmberPolyfillsNs from '@ember/polyfills';
   import type * as EmberUtilsNs from '@ember/utils';
   import type * as EmberRunloopNs from '@ember/runloop';
   import * as EmberObjectNs from '@ember/object';
@@ -40,8 +38,6 @@ declare module 'ember' {
   import EmberArrayProxy from '@ember/array/proxy';
   import type EmberEnumerable from '@ember/array/-private/enumerable';
   import type EmberMutableEnumerable from '@ember/array/-private/mutable-enumerable';
-  // @ember/error
-  import type EmberError from '@ember/error';
 
   type EmberArray<T> = EmberArrayNs.default<T>;
   import type EmberActionHandler from '@ember/object/-private/action-handler';
@@ -125,11 +121,6 @@ declare module 'ember' {
     };
     class EngineInstance extends EmberEngineInstanceNs.default {}
     class Engine extends EmberEngineNs.default {}
-
-    /**
-     * A subclass of the JavaScript Error object for use in Ember.
-     */
-    const Error: ErrorConstructor;
 
     const Evented: typeof EmberObjectEventedNs.default;
     interface Evented extends EmberObjectEventedNs.default {}
@@ -262,18 +253,6 @@ declare module 'ember' {
       function log(level: string, str: string): void;
       function registerHelper(name: string, helper: any): void;
     }
-    namespace String {
-      const camelize: typeof EmberStringNs.camelize;
-      const capitalize: typeof EmberStringNs.capitalize;
-      const classify: typeof EmberStringNs.classify;
-      const dasherize: typeof EmberStringNs.dasherize;
-      const decamelize: typeof EmberStringNs.decamelize;
-      function fmt(...args: string[]): string;
-      const htmlSafe: typeof EmberTemplateNs.htmlSafe;
-      const isHTMLSafe: typeof EmberTemplateNs.isHTMLSafe;
-      const underscore: typeof EmberStringNs.underscore;
-      const w: typeof EmberStringNs.w;
-    }
     namespace Template {
       const htmlSafe: typeof EmberTemplateNs.htmlSafe;
       const isHTMLSafe: typeof EmberTemplateNs.isHTMLSafe;
@@ -292,11 +271,6 @@ declare module 'ember' {
     //    the plucked-off run type *and* the namespace.
     interface Run extends RunFn, EmberRunloop {}
     const run: Run;
-
-    const platform: {
-      defineProperty: boolean;
-      hasPropertyAccessors: boolean;
-    };
 
     /**
      * `getEngineParent` retrieves an engine instance's parent instance.
@@ -339,12 +313,6 @@ declare module 'ember' {
      */
     const isEqual: typeof EmberUtilsNs.isEqual;
     const typeOf: typeof EmberUtilsNs.typeOf;
-    /**
-     * Copy properties from a source object to a target object.
-     * @deprecated until v5.0. You should replace any calls to `Ember.assign`
-     *   with `Object.assign` or use the object spread operator.
-     */
-    const assign: typeof EmberPolyfillsNs.assign;
     const guidFor: typeof EmberObjectInternalsNs.guidFor;
 
     /**

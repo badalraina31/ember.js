@@ -21,11 +21,6 @@ Ember.addObserver({ a: 'foo' }, 'a', {}, () => {});
 // assert
 Ember.assert('2+2 should always be 4', 2 + 2 === 4);
 // assign
-const o1 = Ember.assign({ a: 1 }, { b: 2 });
-expectTypeOf(o1.a).toBeNumber();
-expectTypeOf(o1.b).toBeNumber();
-// @ts-expect-error
-o1.c;
 // Ember.bind // @ts-expect-error
 // cacheFor
 expectTypeOf(Ember.cacheFor({ a: 123 }, 'a')).toEqualTypeOf<number | undefined>();
@@ -202,8 +197,6 @@ e1.register('data:foo', {}, { instantiate: false });
 // Ember.EngineInstance
 const ei1 = new Ember.EngineInstance();
 ei1.lookup('data:foo');
-// Ember.Error
-new Ember.Error('Halp!');
 // Ember.Evented
 interface OE1 extends Ember.Evented {}
 class OE1 extends Ember.Object.extend(Ember.Evented) {}
@@ -286,12 +279,6 @@ new Ember.Test.QUnitAdapter();
 // Ember.Helper
 // helper
 Ember.Helper.helper(([a, b]: [number, number]) => a + b);
-// Ember.String
-Ember.String;
-// htmlSafe
-expectTypeOf(Ember.String.htmlSafe('foo')).toEqualTypeOf<SafeString>();
-// isHTMLSafe
-expectTypeOf(Ember.String.isHTMLSafe('foo')).toEqualTypeOf<boolean>();
 // Ember.Test
 expectTypeOf(Ember.Test.checkWaiters()).toEqualTypeOf<boolean>();
 // checkWaiters

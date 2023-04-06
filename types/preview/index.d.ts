@@ -89,12 +89,9 @@ import './@ember/object/observers';
 import './@ember/object/promise-proxy-mixin';
 import './@ember/object/proxy';
 
-import './@ember/polyfills';
-import './@ember/polyfills/types';
-
 import './@ember/routing';
 import './@ember/routing/-private/router-dsl';
-import './@ember/routing/auto-location';
+import './@ember/routing/location';
 import './@ember/routing/hash-location';
 import './@ember/routing/history-location';
 import './@ember/routing/none-location';
@@ -112,10 +109,10 @@ import './@ember/runloop/types';
 
 import './@ember/service';
 
-import './@ember/string';
-
 import './@ember/template';
 import './@ember/template/-private/handlebars';
+
+import './@ember/template-compilation';
 
 import './@ember/test';
 import './@ember/test/adapter';

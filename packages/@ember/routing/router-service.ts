@@ -156,11 +156,13 @@ class RouterService<R extends Route> extends Service.extend(Evented) {
 
      ```app/routes/application.js
      import Route from '@ember/routing/route';
+     import { service } from '@ember/service';
 
      export default class extends Route {
+       @service router;
        beforeModel() {
          if (!authorized()){
-           this.replaceWith('unauthorized');
+           this.router.replaceWith('unauthorized');
          }
        }
      });
@@ -579,8 +581,7 @@ class RouterService<R extends Route> extends Service.extend(Evented) {
     assert('RouterService is unexpectedly missing an owner', owner);
     let pivotRoute = owner.lookup(`route:${pivotRouteName}`) as Route;
 
-    // R could be instantiated with a different sub-type
-    // @ts-ignore
+    // @ts-expect-error R could be instantiated with a different sub-type
     return this._router._routerMicrolib.refresh(pivotRoute);
   }
 
@@ -668,12 +669,11 @@ class RouterService<R extends Route> extends Service.extend(Evented) {
     ```
 
     The following location types are available by default:
-    `auto`, `hash`, `history`, `none`.
+    `hash`, `history`, `none`.
 
     See [HashLocation](/ember/release/classes/HashLocation).
     See [HistoryLocation](/ember/release/classes/HistoryLocation).
     See [NoneLocation](/ember/release/classes/NoneLocation).
-    See [AutoLocation](/ember/release/classes/AutoLocation).
 
     @property location
     @default 'hash'
@@ -746,3 +746,9 @@ class RouterService<R extends Route> extends Service.extend(Evented) {
 }
 
 export { RouterService as default, RouteInfo, RouteInfoWithAttributes };
+
+declare module '@ember/service' {
+  interface Registry {
+    router: RouterService<Route>;
+  }
+}

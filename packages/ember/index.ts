@@ -12,20 +12,9 @@ import { meta } from '@ember/-internals/meta';
 import * as metal from '@ember/-internals/metal';
 import { FEATURES, isEnabled } from '@ember/canary-features';
 import * as EmberDebug from '@ember/debug';
-import { assert, captureRenderTree, deprecate } from '@ember/debug';
+import { assert, captureRenderTree } from '@ember/debug';
 import Backburner from 'backburner';
 import Controller, { inject as injectController, ControllerMixin } from '@ember/controller';
-import {
-  _getStrings,
-  _setStrings,
-  dasherize,
-  camelize,
-  capitalize,
-  classify,
-  decamelize,
-  underscore,
-  w,
-} from '@ember/string';
 import Service, { service } from '@ember/service';
 
 import EmberObject, {
@@ -59,8 +48,6 @@ import {
   setComponentManager,
   escapeExpression,
   getTemplates,
-  htmlSafe,
-  isHTMLSafe,
   setTemplates,
   template,
   isSerializationFirstNode,
@@ -70,7 +57,6 @@ import VERSION from './version';
 import * as views from '@ember/-internals/views';
 import ContainerDebugAdapter from '@ember/debug/container-debug-adapter';
 import DataAdapter from '@ember/debug/data-adapter';
-import EmberError from '@ember/error';
 import { run } from '@ember/runloop';
 import { getOnerror, setOnerror } from '@ember/-internals/error-handling';
 import EmberArray, { A, NativeArray, isArray, makeArray } from '@ember/array';
@@ -92,12 +78,9 @@ import Observable from '@ember/object/observable';
 import { addObserver, removeObserver } from '@ember/object/observers';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
-import { assign } from '@ember/polyfills';
-import AutoLocation from '@ember/routing/auto-location';
 import HashLocation from '@ember/routing/hash-location';
 import HistoryLocation from '@ember/routing/history-location';
 import NoneLocation from '@ember/routing/none-location';
-import EmberLocation from '@ember/routing/location';
 import Route from '@ember/routing/route';
 import Router from '@ember/routing/router';
 import {
@@ -293,9 +276,6 @@ const PartialEmber = {
   // ****@ember/enumerable/mutable****
   MutableEnumerable,
 
-  // ****@ember/error****
-  Error: EmberError,
-
   // ****@ember/instrumentation****
   instrument: instrumentation.instrument,
   subscribe: instrumentation.subscribe,
@@ -359,26 +339,17 @@ const PartialEmber = {
   // ****@ember/object/proxy****
   ObjectProxy,
 
-  // ****@ember/polyfills****
-  assign,
-
   // ****@ember/routing/-internals****
   RouterDSL,
   controllerFor,
   generateController,
   generateControllerFactory,
 
-  // ****@ember/routing/auto-location****
-  AutoLocation,
-
   // ****@ember/routing/hash-location****
   HashLocation,
 
   // ****@ember/routing/history-location****
   HistoryLocation,
-
-  // ****@ember/routing/location****
-  Location: EmberLocation,
 
   // ****@ember/routing/none-location****
   NoneLocation,
@@ -394,17 +365,6 @@ const PartialEmber = {
 
   // ****@ember/service****
   Service,
-
-  // ****@ember/string****
-  String: {
-    camelize,
-    capitalize,
-    classify,
-    decamelize,
-    dasherize,
-    underscore,
-    w,
-  },
 
   // ****@ember/utils****
   compare,
@@ -462,12 +422,6 @@ const PartialEmber = {
 
   // ****@ember/controller, @ember/service****
   inject,
-
-  // Non-imported
-  platform: {
-    defineProperty: true,
-    hasPropertyAccessors: true,
-  },
 
   __loader: {
     require,
@@ -535,22 +489,6 @@ interface Ember extends PartialEmber {
   set testing(value: boolean);
 
   /**
-    Defines the hash of localized strings for the current language. Used by
-    the `String.loc` helper. To localize, add string values to this
-    hash.
-
-    @property STRINGS
-    @for Ember
-    @type Object
-    @private
-  */
-  // ****@ember/string****
-  get STRINGS(): {
-    [key: string]: string;
-  };
-  set STRINGS(value: { [key: string]: string });
-
-  /**
     Whether searching on the global for new Namespace instances is enabled.
 
     This is only exported here as to not break any addons.  Given the new
@@ -613,12 +551,6 @@ Object.defineProperty(Ember, 'testing', {
   enumerable: false,
 });
 
-Object.defineProperty(Ember, 'STRINGS', {
-  configurable: false,
-  get: _getStrings,
-  set: _setStrings,
-});
-
 Object.defineProperty(Ember, 'BOOTED', {
   configurable: false,
   enumerable: false,
@@ -631,43 +563,6 @@ Object.defineProperty(Ember, 'TEMPLATES', {
   set: setTemplates,
   configurable: false,
   enumerable: false,
-});
-
-function deprecateStringUseOnEmberModule() {
-  deprecate(
-    'Using `Ember.String` is deprecated. Please import methods directly from `@ember/string`.',
-    false,
-    {
-      id: 'ember-string.from-ember-module',
-      for: 'ember-source',
-      since: {
-        available: '4.10',
-        enabled: '4.10.',
-      },
-      until: '5.0.0',
-      url: 'https://deprecations.emberjs.com/v4.x/#toc_ember-string-from-ember-module',
-    }
-  );
-}
-
-Object.defineProperty(Ember, 'String', {
-  enumerable: true,
-  configurable: true,
-  get() {
-    deprecateStringUseOnEmberModule();
-
-    return {
-      camelize,
-      capitalize,
-      classify,
-      dasherize,
-      decamelize,
-      underscore,
-      w,
-      htmlSafe,
-      isHTMLSafe,
-    };
-  },
 });
 
 Object.defineProperty(Ember, 'TEMPLATES', {
